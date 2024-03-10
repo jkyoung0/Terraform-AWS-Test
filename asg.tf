@@ -3,6 +3,10 @@ resource "aws_launch_configuration" "lc" {
   image_id        = "ami-052c9ea013e6e3567"
   instance_type   = "t2.micro"
   security_groups = [aws_security_group.web_sg.id]
+
+  lifecycle {
+    create_before_destroy = true # ASG에서 EC2 인스턴스를 삭제하기 전 먼저 새로운 인스턴스 생성
+  }
 }
 
 
@@ -15,8 +19,8 @@ resource "aws_autoscaling_group" "asg_web" {
   max_size = 3
 
   # ALB 연결
-  health_check_type = "ALB"
-  target_group_arns = [aws_lb_target_group.alb_ex_tg.arn]
+  health_check_type = "ELB"
+  target_group_arns = [aws_alb_target_group.alb_ex_tg.arn]
 
   tag {
     key                 = "Name"
@@ -41,7 +45,7 @@ resource "aws_autoscaling_group" "asg_web" {
 #   # ALB 연결
 #   health_check_type = "ALB"
 #   target_group_arns = [aws_alb_target_group.alb_in_tgt.arn]
-  
+
 #   tag {
 #     key                 = "Name"
 #     value               = "trrf-asg-was"
