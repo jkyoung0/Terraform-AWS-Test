@@ -71,6 +71,7 @@ resource "aws_security_group" "ej_sg_for_elb_in" {
   }
 }
 
+# WAS
 resource "aws_security_group" "ej_sg_for_was" {
   name   = "ej-sg-for-was"
   vpc_id = aws_vpc.ej_vpc.id
@@ -92,3 +93,31 @@ resource "aws_security_group" "ej_sg_for_was" {
   }
 }
 
+# DB
+resource "aws_security_group" "ej_sg_for_db" {
+  name   = "ej-sg-for-db"
+  vpc_id = aws_vpc.ej_vpc.id
+
+  ingress {
+    description     = "Allow http request from WAS"
+    protocol        = "tcp"
+    from_port       = 80 # range of
+    to_port         = 80 # port numbers
+    security_groups = [aws_security_group.ej_sg_for_was.id]
+  }
+
+  ingress { # for access test
+    description     = "Allow MySQL request from WAS"
+    protocol        = "tcp"
+    from_port       = 3306 # range of
+    to_port         = 3306 # port numbers
+    security_groups = [aws_security_group.ej_sg_for_was.id]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}

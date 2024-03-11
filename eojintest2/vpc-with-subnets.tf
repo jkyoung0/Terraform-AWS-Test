@@ -22,7 +22,7 @@ resource "aws_subnet" "ej_pubsubnet_1b" {
   tags = { Name = "pub2"}
 }
 
-# Creating web private subnet 
+# Creating WEB private subnet 
 resource "aws_subnet" "ej_privsubnet_2a_web" {
   vpc_id                  = aws_vpc.ej_vpc.id
   cidr_block              = "10.0.11.0/24" #32 IPs
@@ -39,7 +39,7 @@ resource "aws_subnet" "ej_privsubnet_2b_web" {
   tags = { Name = "web2"}
 }
 
-# Creating was private subnet 
+# Creating WAS private subnet 
 resource "aws_subnet" "ej_privsubnet_2a_was" {
   vpc_id                  = aws_vpc.ej_vpc.id
   cidr_block              = "10.0.12.0/24" #32 IPs
@@ -54,4 +54,21 @@ resource "aws_subnet" "ej_privsubnet_2b_was" {
   map_public_ip_on_launch = false         # private subnet
   availability_zone       = "us-west-2b"
   tags = { Name = "was2"}
+}
+
+# Creating DB private subnet 
+resource "aws_subnet" "ej_privsubnet_2a_db" {
+  vpc_id                  = aws_vpc.ej_vpc.id
+  cidr_block              = "10.0.13.0/24" #32 IPs
+  map_public_ip_on_launch = false         # private subnet
+  availability_zone       = "us-west-2a"
+  tags = { Name = "db1"}
+}
+
+resource "aws_subnet" "ej_privsubnet_2b_db" {
+  vpc_id                  = aws_vpc.ej_vpc.id
+  cidr_block              = "10.0.23.0/24" #32 IPs
+  map_public_ip_on_launch = false         # private subnet
+  availability_zone       = "us-west-2b"
+  tags = { Name = "db2"}
 }
