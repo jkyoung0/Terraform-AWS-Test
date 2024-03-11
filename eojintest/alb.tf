@@ -26,6 +26,18 @@ resource "aws_alb_target_group" "alb_ex_tg" {
   }
 }
 
+resource "aws_alb_target_group_attachment" "tgt_web1" {
+  target_group_arn = aws_alb_target_group.alb_ex_tg.arn
+  target_id        = aws_instance.web1.id
+  port             = 8080
+}
+
+resource "aws_alb_target_group_attachment" "tgt_web2" {
+  target_group_arn = aws_alb_target_group.alb_ex_tg.arn
+  target_id        = aws_instance.web2.id
+  port             = 8080
+}
+
 resource "aws_lb_listener" "alb_lstn_ex" {
   load_balancer_arn = aws_alb.alb_ex.arn
   port              = 80
